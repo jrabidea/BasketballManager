@@ -36,7 +36,7 @@ function Start(){
 		num = Random.value * 100;
 		rawNum = Mathf.Round(num);
 		finalNum = rawNum;
-			if(finalNum > 75 && finalNum < 96){
+			if(finalNum > 75 && finalNum < 95){
 				teams[i].offOverall = finalNum;
 				findOffOverall = false;
 				findDefOverall = true;
@@ -48,7 +48,7 @@ function Start(){
 		while(findDefOverall){
 			num = Random.value * 100;
 			finalNum = Mathf.Round(num);
-			if(finalNum > 75 && finalNum < 96){
+			if(finalNum > 75 && finalNum < 95){
 				teams[i].defOverall = finalNum;
 				findDefOverall = false;
 				findOffOverall = true;
