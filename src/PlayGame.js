@@ -1,7 +1,8 @@
 ﻿var team : GameObject;
 private var num : float;
 private var teamPossession : String;
-private var x : int = 0;
+private var x : int = 1;
+private var start : boolean = true;
 private var homeTeamScore : int;
 private var awayTeamScore : int;
 private var homeTurnovers : int;
@@ -196,22 +197,28 @@ function shootingPercentages(homeOffOverall : int, awayOffOverall: int){
 }
 
 
-function Update(){
+function OnMouseDown(){
 	temp = team.GetComponent(GenerateTeams);
 	teamPossession = temp.teams[0].name;
-	shootingPercentages(temp.teams[0].offOverall, temp.teams[1].offOverall);
-	possessionResult(temp.teams[0], temp.teams[1], 5.0);
+	shootingPercentages(temp.teams[0].offOverall, temp.teams[2].offOverall);
+	while(start){
+	possessionResult(temp.teams[0], temp.teams[2], teamPossession);
+ 	x++;
+		 if(x == 125){
+		 	start = false;
+	 }
+	 yield WaitForSeconds(5.0);
+	}
 }
 
+function possessionResult(team1, team2, possession){
 
-function possessionResult(team1, team2){
-
-
+	possession = teamPossession; 
+	
 	temp = team.GetComponent(GenerateTeams);
 		
 		num = Random.value;
-		
-		if(teamPossession == team1.name){
+		if(possession == team1.name){
 			if(num <= .15){
 				Debug.Log(team1.name + " turnover...");
 				teamPossession = team2.name;
@@ -232,12 +239,12 @@ function possessionResult(team1, team2){
 					num = Random.value;
 					if(num < .50){
 						Debug.Log(team1.name + " offensive rebound...");
-						teamPosssesion = team1.name;
+						teamPossession = team1.name;
 						homeOffRebound++;
 					}
 					else{
 						Debug.Log(team2.name + " defensive rebound...");
-						teamPosssesion = team2.name;
+						teamPossession = team2.name;
 						awayDefRebound++;
 					}
 				}
@@ -269,20 +276,20 @@ function possessionResult(team1, team2){
 			}
 		}
 
-		if(teamPossession == team2.name){
+		if(possession == team2.name){
 			if(num <= .15){
 				Debug.Log(team2.name + " turnover...");
-				teamPossession = team2.name;
+				teamPossession = team1.name;
 				awayTurnovers++;
 			}
 			else if(num > .15 && num <= .65){
 				Debug.Log(team2.name + " shoots a two pointer...");
 				num = Random.value;
-				if(num <= homeTwoPointPercentage){
+				if(num <= awayTwoPointPercentage){
 					Debug.Log(team2.name + " scores two points!");
 					awayTeamScore = awayTeamScore + 2; 
 					awayTwoPointMade++;
-					teamPossession = team2.name;
+					teamPossession = team1.name;
 				}
 				else{
 					Debug.Log(team2.name + " missed the two point shot...");
@@ -290,12 +297,12 @@ function possessionResult(team1, team2){
 					num = Random.value;
 					if(num < .50){
 						Debug.Log(team2.name + " offensive rebound...");
-						teamPosssesion = team2.name;
+						teamPossession = team2.name;
 						awayOffRebound++;
 					}
 					else{
 						Debug.Log(team1.name + " defensive rebound...");
-						teamPosssesion = team1.name;
+						teamPossession = team1.name;
 						homeDefRebound++;
 					}
 				}
@@ -303,11 +310,11 @@ function possessionResult(team1, team2){
 			else{
 				Debug.Log(team2.name + " shoots a three pointer...");
 				num = Random.value;
-				if(num <= homeThreePointPercentage){
+				if(num <= awayThreePointPercentage){
 					Debug.Log(team2.name + " scores three points!");
 					awayTeamScore = awayTeamScore + 3;
 					awayThreePointMade++;
-					teamPossession = team2.name;
+					teamPossession = team1.name;
 				}
 				else{
 					Debug.Log(team2.name + " missed the three point shot...");
@@ -327,6 +334,6 @@ function possessionResult(team1, team2){
 			}
 		}
 		
-		Debug.Log(team1.name + ": " + homeTeamScore + " "  + team2.name + ": " + awayTeamScore); 	
+		Debug.Log(team1.name + ": " + homeTeamScore + " "  + team2.name + ": " + awayTeamScore); 
 }		
 	
